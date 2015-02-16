@@ -8,12 +8,30 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import bean.CustomerBean;
+import bean.CustomerDTO;
 
+/**
+ * @author JBD
+ *
+ *         Cette classe est une entité référençant la table Customer (cf
+ *         database/customer.sql) se trouvant en base de données. Grâce au
+ *         mapping d'Hibernate, les différents attributs sont reconnus comme
+ *         correspondant aux colonnes associées.
+ * 
+ *         Une instance non enregistrée en base de donnée sera donc une instance
+ *         de cet objet qui n'a pas d'équivalence en base de données. 
+ *
+ */
 @Entity
 @Table(name = "Customer")
+@NamedQueries({
+		@NamedQuery(name = "Customer.findByName", query = "from Customer c where c.name = :name"),
+		@NamedQuery(name = "Customer.findByAdress", query = "from Customer c where c.address = :address"),
+		@NamedQuery(name = "Customer.findByNameAndAddress", query = "from Customer c where c.address = :address and c.name = :name") })
 public class Customer implements Serializable {
 
 	/**
@@ -21,6 +39,15 @@ public class Customer implements Serializable {
 	 */
 	private static final long serialVersionUID = 1710234886606599946L;
 
+	/*
+	 * customerId est ici noté comme étant une clef primaire grâce à @Id, qui
+	 * correspond à la colonne customerId grâce à @Column et finalement, qu'elle
+	 * est générée grâce à @GeneratedValue.
+	 * 
+	 * L'annotation @Column est facultative si le nom de l'attribut correspond
+	 * au nom de la colonne. Dans notre cas, toutes les annotations @Column
+	 * auront donc pu être supprimées.
+	 */
 	@Id
 	@Column(name = "customerId")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +63,7 @@ public class Customer implements Serializable {
 	private Date createdDate;
 
 	public Customer() {
-		
+
 	}
 
 	public Customer(final String name, final String address, final Date createdDate) {
@@ -45,7 +72,8 @@ public class Customer implements Serializable {
 		this.createdDate = createdDate;
 	}
 
-	public Customer(final Long customerId, final String name, final String address, final Date createdDate) {
+	public Customer(final Long customerId, final String name, final String address,
+			final Date createdDate) {
 		this.customerId = customerId;
 		this.name = name;
 		this.address = address;
@@ -84,7 +112,7 @@ public class Customer implements Serializable {
 		this.createdDate = createdDate;
 	}
 
-	public CustomerBean entity2Bean(){
-		return new CustomerBean(this.customerId, this.name, this.address, this.createdDate);
+	public CustomerDTO entity2Bean() {
+		return new CustomerDTO(this.customerId, this.name, this.address, this.createdDate);
 	}
 }
