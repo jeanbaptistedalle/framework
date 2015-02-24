@@ -1,6 +1,8 @@
 package bean;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import model.Customer;
@@ -86,6 +88,11 @@ public class CustomerDTO implements Serializable {
 
 	public Date getCreatedDate() {
 		return this.createdDate;
+	}
+	
+	public String getFormatCreatedDate(){
+		final DateFormat df = new SimpleDateFormat("d/M/y");
+		return df.format(createdDate);
 	}
 
 	public void setCreatedDate(final Date createdDate) {

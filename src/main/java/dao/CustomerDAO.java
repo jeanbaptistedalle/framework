@@ -19,6 +19,10 @@ import com.googlecode.genericdao.dao.hibernate.GenericDAO;
  *         <nom_de_l'entité>DAO et dont l'implémentation sera
  *         <nom_de_l'entité>DAOImpl.
  * 
+ *         Finalement, afin d'être utilisé avec Spring, un bean correspondant à
+ *         cette interface se trouve dans CustomerBean.xml et est liée à son
+ *         implémentation
+ * 
  *         Cette classe étend GenericDAO, ce qui fournit à notre classe tout un
  *         panel d'action basique déjà implémentée (comme find(id), findAll(),
  *         save(customer), etc.)

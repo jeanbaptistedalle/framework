@@ -6,13 +6,6 @@
 <body>
 	<h1>Struts 2 + Spring + Hibernate</h1>
 
-	<h2>Add Customer</h2>
-	<s:form action="addCustomerAction">
-		<s:textfield name="customer.name" label="Name" value="" />
-		<s:textarea name="customer.address" label="Address" value="" cols="50" rows="5" />
-		<s:submit />
-	</s:form>
-
 	<h2>All Customers</h2>
 
 	<s:if test="customerList != null && customerList.size() > 0">
@@ -22,19 +15,28 @@
 				<th>Name</th>
 				<th>Address</th>
 				<th>Created Date</th>
+				<th></th>
+				<th></th>
 			</tr>
-			<s:iterator value="customerList" status="userStatus">
+			<s:iterator value="customerList" var="customer"
+				status="userStatus">
 				<tr>
-					<td><s:property value="customerId" /></td>
-					<td><s:property value="name" /></td>
-					<td><s:property value="address" /></td>
-					<td><s:date name="createdDate" format="dd/MM/yyyy" /></td>
+					<td>${customer.customerId}</td>
+					<td>${customer.name}</td>
+					<td>${customer.address}</td>
+					<td>${customer.formatCreatedDate}</td>
+					<td><s:url id="deleteAction" action="deleteCustomerAction">
+							<s:param name="customerId" value="customerId" />
+						</s:url> <s:a href="%{deleteAction}">delete</s:a></td>
+					<td><s:url id="editAction" action="editCustomerAction">
+							<s:param name="customerId" value="customerId" />
+						</s:url> <s:a href="%{editAction}">edit</s:a></td>
 				</tr>
 			</s:iterator>
 		</table>
 	</s:if>
-	<br />
-	<br />
 
+	<s:url id="createAction" action="editCustomerAction" />
+	<s:a href="%{createAction}">create customer</s:a>
 </body>
 </html>

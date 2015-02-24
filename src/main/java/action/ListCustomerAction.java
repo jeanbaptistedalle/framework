@@ -1,15 +1,18 @@
 package action;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import service.CustomerService;
+import javax.servlet.http.HttpServletRequest;
 
+import org.apache.struts2.ServletActionContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
+import service.CustomerService;
 import bean.CustomerDTO;
+
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionSupport;
 
 /**
  * @author JBD
@@ -19,19 +22,27 @@ import bean.CustomerDTO;
  * 
  *         Ainsi, cette classe correspond au controlleur de la couche
  *         présentation.
+ *         
+ *         Afin d'utiliser des actions Struts2 avec Spring, un bean correspondant à cette classe se trouve dans CustomerBean.xml
  * 
  *         !!ATTENTION!! Les méthodes des classes Action ne peuvent appeler que
  *         des méthodes de la couche Service ! Il est formellement interdit
  *         d'appeler une méthode d'un DAO dans la couche présentation !!
  *
  */
-@Component
-public class CustomerAction {
+public class ListCustomerAction extends ActionSupport{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6874495899552728610L;
+
 
 	private static final String SUCCESS = "success";
 
-	private CustomerDTO customer = new CustomerDTO();
+
 	private List<CustomerDTO> customerList = new ArrayList<CustomerDTO>();
+	private CustomerDTO customer;
 
 	/*
 	 * Cette annotation permet à Spring d'injecter la dépendance à cette classe.
@@ -44,44 +55,12 @@ public class CustomerAction {
 	private CustomerService customerService;
 
 	/**
-	 * Cette méthode est une action (définie dans struts.xml) qui permet de
-	 * sauvegarder le client courrant. Cette action étant appelé lors de la
-	 * validation du formulaire de la page customer.jsp, l'instance de customer
-	 * contiendra les données du formulaire
+	 * Cette methode est une action (définie dans le fichier struts.xml) qui
+	 * permet d'initialiser la liste des clients
 	 * 
 	 * @return
-	 * @throws Exception
 	 */
-	public String addCustomer() throws Exception {
-
-		customer.setCreatedDate(new Date());
-		/*
-		 * On envoie le customer à la couche service afin qu'il soit enregistré
-		 */
-		customerService.addCustomer(customer);
-
-		/*
-		 * Puis on recré la liste des clients. Celle-ci provient elle aussi de
-		 * la couche service
-		 */
-		customerList = customerService.listCustomer();
-
-		/*
-		 * On suppose ici que le traitement est réussi, on renvoie donc
-		 * "success". Si on voulait faire intervenir une gestion d'erreur plus
-		 * poussée, il suffirait de créer de nouveau message puis de définir le
-		 * comportement attendu dans le struts.xml
-		 */
-		return SUCCESS;
-	}
-
-	/**
-	 * Cette methode permet d'initialiser la liste des clients
-	 * 
-	 * @return
-	 * @throws Exception
-	 */
-	public String listCustomer() throws Exception {
+	public String listCustomer() {
 
 		/*
 		 * Comme précédèmment, on récupère les données grâce à des appels à la
@@ -90,7 +69,29 @@ public class CustomerAction {
 		customerList = customerService.listCustomer();
 
 		return SUCCESS;
+	}
 
+	/**
+	 * Cette methode permet de supprimer le client fournit en paramètre par la
+	 * requête
+	 * 
+	 * @return
+	 */
+	public String deleteCustomer() {
+		HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(
+				ServletActionContext.HTTP_REQUEST);
+		try {
+			/*
+			 * On récupère dans la requete le paramètre nécessaire au traitement
+			 */
+			final Long customerId = Long.parseLong(request.getParameter("customerId"));
+			if (customerId != null) {
+				customerService.deleteCustomer(customerId);
+			}
+		} catch (final Exception e) {
+			// do nothing
+		}
+		return SUCCESS;
 	}
 
 	public CustomerDTO getCustomer() {

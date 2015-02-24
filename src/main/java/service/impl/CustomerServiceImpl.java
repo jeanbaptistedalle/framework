@@ -30,17 +30,6 @@ public class CustomerServiceImpl implements CustomerService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see service.CustomerService#addCustomer(bean.CustomerBean)
-	 */
-	public void addCustomer(final CustomerDTO customerDTO) {
-		// On transforme le bean en entité
-		final Customer customer = customerDTO.dto2Entity();
-		customerDAO.save(customer);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see service.CustomerService#listCustomer()
 	 */
 	public List<CustomerDTO> listCustomer() {
@@ -66,11 +55,40 @@ public class CustomerServiceImpl implements CustomerService {
 		return listBean;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see service.CustomerService#deleteCustomer(java.lang.Long)
+	 */
+	public void deleteCustomer(final Long customerId) {
+		customerDAO.removeById(customerId);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see service.CustomerService#getCustomerById(java.lang.Long)
+	 */
+	public CustomerDTO getCustomerById(final Long customerId) {
+		final Customer customer = customerDAO.find(customerId);
+		if (customer != null) {
+			return customer.entity2Bean();
+		}
+		return null;
+	}
+
+	public void saveCustomer(final CustomerDTO customer) {
+		if (customer != null) {
+			final Customer c = customer.dto2Entity();
+			customerDAO.save(c);
+		}
+	}
+
 	public CustomerDAO getCustomerDAO() {
 		return customerDAO;
 	}
 
-	public void setCustomerDAO(CustomerDAO customerDAO) {
+	public void setCustomerDAO(final CustomerDAO customerDAO) {
 		this.customerDAO = customerDAO;
 	}
 }

@@ -24,10 +24,6 @@ import dao.CustomerDAO;
 @Transactional
 public class CustomerDAOImpl extends GenericDAOImpl<Customer, Long> implements CustomerDAO {
 
-	/*
-	 * Ici, on injectera sessionFactory grâce à la méthode
-	 * setSessionFactory(sessionFactory) (voir plus bas)
-	 */
 	private SessionFactory sessionFactory;
 
 	/*

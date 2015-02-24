@@ -8,12 +8,20 @@
  	
 	<package name="default" namespace="/" extends="struts-default">
 		
-		<action name="addCustomerAction" class="action.CustomerAction" method="addCustomer" >
+		<action name="editCustomerAction" class="editCustomerAction" method="editCustomer" >
+		    <result name="success">pages/editCustomer.jsp</result>
+		</action>
+		
+		<action name="saveCustomerAction" class="editCustomerAction" method="saveCustomer" >
+		    <result name="success" type="redirect">listCustomerAction</result>
+		</action>
+	
+		<action name="listCustomerAction" class="listCustomerAction" method="listCustomer" >
 		    <result name="success">pages/customer.jsp</result>
 		</action>
 	
-		<action name="listCustomerAction" class="action.CustomerAction" method="listCustomer" >
-		    <result name="success">pages/customer.jsp</result>
+		<action name="deleteCustomerAction" class="listCustomerAction" method="deleteCustomer" >
+		    <result name="success" type="redirect">listCustomerAction</result>
 		</action>
 		
 	</package>
