@@ -1,4 +1,4 @@
-package bean;
+package dto;
 
 import java.io.Serializable;
 import java.text.DateFormat;

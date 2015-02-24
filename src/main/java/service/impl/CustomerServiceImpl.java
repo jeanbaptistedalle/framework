@@ -11,8 +11,8 @@ import model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import bean.CustomerDTO;
 import dao.CustomerDAO;
+import dto.CustomerDTO;
 
 /**
  * @author JBD

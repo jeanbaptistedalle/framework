@@ -12,7 +12,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import bean.CustomerDTO;
+import dto.CustomerDTO;
 
 /**
  * @author JBD
@@ -23,7 +23,7 @@ import bean.CustomerDTO;
  *         correspondant aux colonnes associées.
  * 
  *         Une instance non enregistrée en base de donnée sera donc une instance
- *         de cet objet qui n'a pas d'équivalence en base de données. 
+ *         de cet objet qui n'a pas d'équivalence en base de données.
  *
  */
 @Entity

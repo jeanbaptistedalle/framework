@@ -2,7 +2,7 @@ package service;
 
 import java.util.List;
 
-import bean.CustomerDTO;
+import dto.CustomerDTO;
 
 /**
  * @author JBD
@@ -15,10 +15,6 @@ import bean.CustomerDTO;
  *         préferera définir une interface de type dont le nom est
  *         <nom_de_l'entité>Service et dont l'implémentation sera
  *         <nom_de_l'entité>ServiceImpl.
- * 
- *         Finalement, afin d'être utilisé avec Spring, un bean correspondant à
- *         cette interface se trouve dans CustomerBean.xml et est liée à son
- *         implémentation
  * 
  *         Les services ont un statut particulier car ils manipulent deux types
  *         d'objets gérant les données

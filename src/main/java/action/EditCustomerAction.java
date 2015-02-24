@@ -6,12 +6,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import service.CustomerService;
-import bean.CustomerDTO;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+
+import dto.CustomerDTO;
 
 /**
  * @author JBD
@@ -22,13 +24,12 @@ import com.opensymphony.xwork2.ActionSupport;
  *         Ainsi, cette classe correspond au controlleur de la couche
  *         présentation.
  * 
- *         Afin d'utiliser des actions Struts2 avec Spring, un bean correspondant à cette classe se trouve dans CustomerBean.xml
- *         
  *         !!ATTENTION!! Les méthodes des classes Action ne peuvent appeler que
  *         des méthodes de la couche Service ! Il est formellement interdit
  *         d'appeler une méthode d'un DAO dans la couche présentation !!
  *
  */
+@Controller
 public class EditCustomerAction extends ActionSupport {
 
 	/**
