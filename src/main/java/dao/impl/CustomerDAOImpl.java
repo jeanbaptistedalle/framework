@@ -16,9 +16,13 @@ import com.googlecode.genericdao.dao.hibernate.GenericDAOImpl;
 import dao.CustomerDAO;
 
 /**
- * @author JBD
+ * Avec Spring, les DAO sont des beans particulier, qui sont repéré ici grâce à
+ * l'annotation @Repository. De plus, l'annotation @Transactionnal permet
+ * d'indiquer à Spring que cette classe a besoin qu'une transaction soit active
+ * pour fonctionner.
  *
  * @see dao.CustomerDAO
+ * 
  */
 @Repository
 @Transactional
@@ -26,11 +30,10 @@ public class CustomerDAOImpl extends GenericDAOImpl<Customer, Long> implements C
 
 	private SessionFactory sessionFactory;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see dao.CustomerDAO#findByName(java.lang.String)
-	 */
+	public List<Customer> listCustomer(){
+		return this.findAll();
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<Customer> findByName(final String name) {
 		final Query query = sessionFactory.openSession().getNamedQuery("Customer.findByName");
@@ -38,24 +41,17 @@ public class CustomerDAOImpl extends GenericDAOImpl<Customer, Long> implements C
 		return (List<Customer>) query.list();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see dao.CustomerDAO#findByAddress(java.lang.String)
-	 */
 	@SuppressWarnings("unchecked")
 	public List<Customer> findByAddress(final String address) {
+		/*
+		 * Ici, on appelle la requête Customer.findByAddress qui est définie
+		 * dans la classe Customer
+		 */
 		final Query query = sessionFactory.openSession().getNamedQuery("Customer.findByAddress");
 		query.setParameter("address", address);
 		return (List<Customer>) query.list();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see dao.CustomerDAO#findByNameAndAddress(java.lang.String,
-	 * java.lang.String)
-	 */
 	@SuppressWarnings("unchecked")
 	public List<Customer> findByNameAndAddress(final String name, final String address) {
 		final Query query = sessionFactory.openSession().getNamedQuery(

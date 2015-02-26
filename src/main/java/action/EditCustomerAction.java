@@ -16,17 +16,14 @@ import com.opensymphony.xwork2.ActionSupport;
 import dto.CustomerDTO;
 
 /**
- * @author JBD
- *
- *         Cette classe fournit les différentes actions disponibles pour la page
- *         editCustomer.jsp
+ * Cette classe fournit les différentes actions disponibles pour la page
+ * editCustomer.jsp
  * 
- *         Ainsi, cette classe correspond au controlleur de la couche
- *         présentation.
+ * Ainsi, cette classe correspond au controlleur de la couche présentation.
  * 
- *         !!ATTENTION!! Les méthodes des classes Action ne peuvent appeler que
- *         des méthodes de la couche Service ! Il est formellement interdit
- *         d'appeler une méthode d'un DAO dans la couche présentation !!
+ * !!ATTENTION!! Les méthodes des classes Action ne peuvent appeler que des
+ * méthodes de la couche Service ! Il est formellement interdit d'appeler une
+ * méthode d'un DAO dans la couche présentation !!
  *
  */
 @Controller
@@ -42,11 +39,12 @@ public class EditCustomerAction extends ActionSupport {
 	private CustomerDTO customer;
 
 	/*
-	 * Cette annotation permet à Spring d'injecter la dépendance à cette classe.
-	 * Si la configuration est bonne (le bean doit être défini dans le fichier
-	 * CustomerBean.xml), Spring se chargera d'initialiser CustomerService, puis
-	 * d'utiliser setCustomerService() afin d'injecter la dépendance dans cette
-	 * classe.
+	 * Cette annotation permet à Spring d'injecter une dépendance à cette
+	 * classe. Spring se chargera alors d'initialiser CustomerService, puis
+	 * d'utiliser setCustomerService() afin de l'injecter dans cette classe.
+	 * Ceci n'est néanmoins possible que si la classe CustomerService est
+	 * effectivement détecté comme étant un bean par Spring, ce qui est possible
+	 * en utilisant l'annotation @Service
 	 */
 	@Autowired
 	private CustomerService customerService;

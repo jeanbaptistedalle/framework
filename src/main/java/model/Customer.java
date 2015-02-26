@@ -15,15 +15,21 @@ import javax.persistence.Table;
 import dto.CustomerDTO;
 
 /**
- * @author JBD
- *
- *         Cette classe est une entité référençant la table Customer (cf
- *         database/customer.sql) se trouvant en base de données. Grâce au
- *         mapping d'Hibernate, les différents attributs sont reconnus comme
- *         correspondant aux colonnes associées.
+ * Cette classe est une entité référençant la table Customer (cf
+ * database/customer.sql) se trouvant en base de données. Grâce au mapping
+ * d'Hibernate, les différents attributs sont reconnus comme correspondant aux
+ * colonnes associées.
  * 
- *         Une instance non enregistrée en base de donnée sera donc une instance
- *         de cet objet qui n'a pas d'équivalence en base de données.
+ * Une instance non enregistrée en base de donnée sera donc une instance de cet
+ * objet qui n'a pas d'équivalence en base de données.
+ * 
+ * De plus, on fournit en début de classe des requêtes nommées, qui pourront
+ * être appelée dans le DAO grâce à la méthode createNamedQuery(nomRequete).
+ * L'avantage de définir les requêtes de cette façon est qu'elles sont
+ * précompilées lors du lancement du serveur, alors qu'une requête "en dur" dans
+ * le code ne sera compilée que lors de son execution. Ainsi, si une
+ * modification de la structure rend incorrect une requête, on le saura
+ * immédiatement !
  *
  */
 @Entity

@@ -18,16 +18,25 @@
 				<th></th>
 				<th></th>
 			</tr>
-			<s:iterator value="customerList" var="customer"
-				status="userStatus">
+			<!-- Grâce à s.iterator, on peut iterer sur une liste se situant dans le code java. 
+				Ici, on itère donc sur customerList, qui se trouve dans la classe ListCustomerAction
+				et on stocke l'utilisateur actuel dans la variable customer -->
+			<s:iterator value="customerList" var="customer" status="userStatus">
 				<tr>
+					<!-- On utilise ici une notation EL pour accéder aux attributs de customer-->
 					<td>${customer.customerId}</td>
+					<!-- customer.customerId appelle en fait customer.getCustomerId(), il faut donc 
+					respecter rigouresement la syntaxe des getters/setters 
+					(à savoir minuscule pour le premier mot, majuscule pour les suivants) -->
 					<td>${customer.name}</td>
 					<td>${customer.address}</td>
 					<td>${customer.formatCreatedDate}</td>
+					
+					<!-- On définit ici une url qui référence une action, puis on l'affecte à un lien -->
 					<td><s:url id="deleteAction" action="deleteCustomerAction">
 							<s:param name="customerId" value="customerId" />
 						</s:url> <s:a href="%{deleteAction}">delete</s:a></td>
+
 					<td><s:url id="editAction" action="editCustomerAction">
 							<s:param name="customerId" value="customerId" />
 						</s:url> <s:a href="%{editAction}">edit</s:a></td>

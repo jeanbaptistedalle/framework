@@ -15,8 +15,11 @@ import dao.CustomerDAO;
 import dto.CustomerDTO;
 
 /**
- * @author JBD
- *
+ * Avec Spring, les Services sont des beans particulier, qui sont repéré ici
+ * grâce à l'annotation @Service. De plus, l'annotation @Transactionnal permet
+ * d'indiquer à Spring que cette classe a besoin qu'une transaction soit active
+ * pour fonctionner.
+ * 
  * @see service.CustomerService
  * 
  */
@@ -24,28 +27,31 @@ import dto.CustomerDTO;
 @Transactional
 public class CustomerServiceImpl implements CustomerService {
 
+	/*
+	 * Cette annotation permet à Spring d'injecter une dépendance à cette
+	 * classe. Spring se chargera alors d'initialiser CustomerDAO, puis
+	 * d'utiliser setCustomerDAO() afin de l'injecter dans cette classe. Ceci
+	 * n'est néanmoins possible que si la classe CustomerDAO est effectivement
+	 * détecté comme étant un bean par Spring, ce qui est possible en utilisant
+	 * l'annotation @Repository
+	 */
 	@Autowired
 	private CustomerDAO customerDAO;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see service.CustomerService#listCustomer()
-	 */
 	public List<CustomerDTO> listCustomer() {
-		final List<Customer> list = customerDAO.findAll();
-		final List<CustomerDTO> listBean = new ArrayList<CustomerDTO>();
+		/*
+		 * Grâce à un appel au DAO, on récupère les Clients. Ensuite, on les
+		 * convertit en CustomerDTO car les objets entités ne doivent pas aller
+		 * dans la couche Présentation
+		 */
+		final List<Customer> list = customerDAO.listCustomer();
+		final List<CustomerDTO> listDTO = new ArrayList<CustomerDTO>();
 		for (Customer c : list) {
-			listBean.add(c.entity2Bean());
+			listDTO.add(c.entity2Bean());
 		}
-		return listBean;
+		return listDTO;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see service.CustomerService#listCustomerByName(java.lang.String)
-	 */
 	public List<CustomerDTO> listCustomerByName(final String name) {
 		final List<Customer> list = customerDAO.findByName(name);
 		final List<CustomerDTO> listBean = new ArrayList<CustomerDTO>();
@@ -55,20 +61,10 @@ public class CustomerServiceImpl implements CustomerService {
 		return listBean;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see service.CustomerService#deleteCustomer(java.lang.Long)
-	 */
 	public void deleteCustomer(final Long customerId) {
 		customerDAO.removeById(customerId);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see service.CustomerService#getCustomerById(java.lang.Long)
-	 */
 	public CustomerDTO getCustomerById(final Long customerId) {
 		final Customer customer = customerDAO.find(customerId);
 		if (customer != null) {

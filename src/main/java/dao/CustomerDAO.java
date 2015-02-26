@@ -4,33 +4,28 @@ import java.util.List;
 
 import model.Customer;
 
-import org.springframework.stereotype.Repository;
-
 import com.googlecode.genericdao.dao.hibernate.GenericDAO;
 
 /**
- * @author JBD
- *
- *         Ce DAO (Data Access Object) fournit les méthodes permettant de
- *         récuperer les objets entité référençant les clients et correspond
- *         donc à la couche Persistance (la seule qui peut agir sur la base de
- *         donnée). Afin de faciliter l'injection de dépendance grâce à Spring,
- *         on préferera définir une interface de type dont le nom est
- *         <nom_de_l'entité>DAO et dont l'implémentation sera
- *         <nom_de_l'entité>DAOImpl.
+ * Ce DAO (Data Access Object) fournit les méthodes permettant de récuperer les
+ * objets entité référençant les clients et correspond donc à la couche
+ * Persistance (la seule qui peut agir sur la base de donnée). Afin de faciliter
+ * l'injection de dépendance grâce à Spring, on préferera définir une interface
+ * de type dont le nom est <nom_de_l'entité>DAO et dont l'implémentation sera
+ * <nom_de_l'entité>DAOImpl.
  * 
- *         Cette classe étend GenericDAO, ce qui fournit à notre classe tout un
- *         panel d'action basique déjà implémentée (comme find(id), findAll(),
- *         save(customer), etc.)
+ * Cette classe étend GenericDAO, ce qui fournit à notre classe tout un panel
+ * d'action basique déjà implémentée (comme find(id), findAll(), save(customer),
+ * etc.)
  * 
- *         !!ATTENTION!! Les méthodes des classes DAO ne doivent être appelée
- *         que dans la couche Service ou dans la couche Persistance ! Il est
- *         formellement interdit d'appeler une méthode d'un DAO dans la couche
- *         présentation !!
+ * !!ATTENTION!! Les méthodes des classes DAO ne doivent être appelée que dans
+ * la couche Service ou dans la couche Persistance ! Il est formellement
+ * interdit d'appeler une méthode d'un DAO dans la couche présentation !!
  *
  */
-@Repository("customerDao")
 public interface CustomerDAO extends GenericDAO<Customer, Long> {
+	
+	public List<Customer> listCustomer();
 
 	/**
 	 * Cette méthode permet de récuperer les clients dont le nom correspond avec

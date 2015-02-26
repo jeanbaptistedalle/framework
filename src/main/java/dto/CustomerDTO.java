@@ -8,21 +8,19 @@ import java.util.Date;
 import model.Customer;
 
 /**
- * @author JBD
- *
- *         CustomerDTO est un objet DTO (Data Transfer Object) qui permet de
- *         faire transiter les données d'une couche à une autre, ici de la
- *         couche service à la couche présentation. Cette classe est donc le
- *         reflet de l'objet entité {@link Customer}.
+ * CustomerDTO est un objet DTO (Data Transfer Object) qui permet de faire
+ * transiter les données d'une couche à une autre, ici de la couche service à la
+ * couche présentation. Cette classe est donc le reflet de l'objet entité
+ * {@link Customer}.
  * 
- *         Ce genre de classe est appelé POJO (Plain Old Java Object). Utiliser
- *         ces DTO permet d'obtenir des objets n'implémentant plus certaines
- *         interfaces ou frameworks.
+ * Ce genre de classe est appelé POJO (Plain Old Java Object). Utiliser ces DTO
+ * permet d'obtenir des objets n'implémentant plus certaines interfaces ou
+ * frameworks.
  * 
- *         Dans notre cas, l'utilisation d'un DTO nous permet de remonter des
- *         données dans la couche de Présentation sans qu'elles ne soient liées
- *         à la couche de Persistance et donc à Hibernate (on ne trouve par
- *         exemple plus aucune annotation liées comme @Entity, @Column, etc.)
+ * Dans notre cas, l'utilisation d'un DTO nous permet de remonter des données
+ * dans la couche de Présentation sans qu'elles ne soient liées à la couche de
+ * Persistance et donc à Hibernate (on ne trouve par exemple plus aucune
+ * annotation liées comme @Entity, @Column, etc.)
  *
  */
 public class CustomerDTO implements Serializable {
@@ -89,8 +87,8 @@ public class CustomerDTO implements Serializable {
 	public Date getCreatedDate() {
 		return this.createdDate;
 	}
-	
-	public String getFormatCreatedDate(){
+
+	public String getFormatCreatedDate() {
 		final DateFormat df = new SimpleDateFormat("d/M/y");
 		return df.format(createdDate);
 	}
