@@ -44,4 +44,8 @@ public interface CustomerService {
 	 * @param customerDTO
 	 */
 	public void saveCustomer(final CustomerDTO customer);
+
+	public void saveCustomerWithOrder(final CustomerDTO customer);
+
+	public void deleteOrderById(final Long orderCustomerId);
 }

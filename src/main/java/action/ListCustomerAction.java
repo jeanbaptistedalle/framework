@@ -1,20 +1,19 @@
 package action;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts2.ServletActionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import service.CustomerService;
+import service.OrderCustomerService;
 
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 import dto.CustomerDTO;
+import dto.OrderCustomerDTO;
 
 /**
  * Cette classe fournit les différentes actions disponibles pour la page
@@ -40,6 +39,9 @@ public class ListCustomerAction extends ActionSupport {
 
 	private List<CustomerDTO> customerList = new ArrayList<CustomerDTO>();
 	private CustomerDTO customer;
+	private OrderCustomerDTO orderCustomer;
+	private Long orderCustomerId;
+	private Long customerId;
 
 	/*
 	 * Cette annotation permet à Spring d'injecter une dépendance à cette
@@ -51,6 +53,9 @@ public class ListCustomerAction extends ActionSupport {
 	 */
 	@Autowired
 	private CustomerService customerService;
+
+	@Autowired
+	private OrderCustomerService orderCustomerService;
 
 	/**
 	 * Cette methode est une action (définie dans le fichier struts.xml) qui
@@ -75,18 +80,43 @@ public class ListCustomerAction extends ActionSupport {
 	 * @return
 	 */
 	public String deleteCustomer() {
-		HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(
-				ServletActionContext.HTTP_REQUEST);
-		try {
-			/*
-			 * On récupère dans la requete le paramètre nécessaire au traitement
-			 */
-			final Long customerId = Long.parseLong(request.getParameter("customerId"));
-			if (customerId != null) {
-				customerService.deleteCustomer(customerId);
+		/*
+		 * On récupère dans la requete le paramètre nécessaire au traitement
+		 */
+		if (customerId != null) {
+			customerService.deleteCustomer(customerId);
+		}
+		return SUCCESS;
+	}
+
+	/**
+	 * Cette méthode permet de créer des commandes pour l'utilisateur choisi. Il
+	 * n'y a pas de formulaire, mais cela nous permet néanmoins de voir comment
+	 * les choses se passent
+	 * 
+	 * @return
+	 */
+	public String addOrder() {
+		/*
+		 * On récupère dans la requete le paramètre nécessaire au traitement
+		 */
+		if (customerId != null) {
+			for (final CustomerDTO customer : customerList) {
+				if (customer.getCustomerId() == customerId) {
+					final OrderCustomerDTO orderCustomer = new OrderCustomerDTO();
+					orderCustomer.setOrderDate(new Date());
+					customer.getOrderCustomers().add(orderCustomer);
+					customerService.saveCustomerWithOrder(customer);
+					break;
+				}
 			}
-		} catch (final Exception e) {
-			// do nothing
+		}
+		return SUCCESS;
+	}
+
+	public String deleteOrder() {
+		if (orderCustomerId != null) {
+			customerService.deleteOrderById(orderCustomerId);
 		}
 		return SUCCESS;
 	}
@@ -113,5 +143,45 @@ public class ListCustomerAction extends ActionSupport {
 
 	public void setCustomerList(List<CustomerDTO> customerList) {
 		this.customerList = customerList;
+	}
+
+	public OrderCustomerDTO getOrderCustomer() {
+		return orderCustomer;
+	}
+
+	public void setOrderCustomer(OrderCustomerDTO orderCustomer) {
+		this.orderCustomer = orderCustomer;
+	}
+
+	public Long getOrderCustomerId() {
+		return orderCustomerId;
+	}
+
+	public void setOrderCustomerId(Long orderCustomerId) {
+		this.orderCustomerId = orderCustomerId;
+	}
+
+	public Long getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(Long customerId) {
+		this.customerId = customerId;
+	}
+
+	public OrderCustomerService getOrderCustomerService() {
+		return orderCustomerService;
+	}
+
+	public void setOrderCustomerService(OrderCustomerService orderCustomerService) {
+		this.orderCustomerService = orderCustomerService;
+	}
+
+	public List<OrderCustomerDTO> getOrderCustomers() {
+		if (customer != null) {
+			return customer.getOrderCustomers();
+		} else {
+			return null;
+		}
 	}
 }

@@ -38,6 +38,16 @@
 			<result name="success" type="redirect">listCustomerAction</result>
 		</action>
 
+		<action name="addOrderAction" class="listCustomerAction"
+			method="addOrder">
+			<result name="success" type="redirect">listCustomerAction</result>
+		</action>
+
+		<action name="deleteOrderAction" class="listCustomerAction"
+			method="deleteOrder">
+			<result name="success" type="redirect">listCustomerAction</result>
+		</action>
+
 	</package>
 
 </struts>

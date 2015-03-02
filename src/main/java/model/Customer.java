@@ -1,8 +1,11 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,9 +13,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import dto.CustomerDTO;
+import dto.OrderCustomerDTO;
 
 /**
  * Cette classe est une entité référençant la table Customer (cf
@@ -37,7 +42,8 @@ import dto.CustomerDTO;
 @NamedQueries({
 		@NamedQuery(name = "Customer.findByName", query = "from Customer c where c.name = :name"),
 		@NamedQuery(name = "Customer.findByAdress", query = "from Customer c where c.address = :address"),
-		@NamedQuery(name = "Customer.findByNameAndAddress", query = "from Customer c where c.address = :address and c.name = :name") })
+		@NamedQuery(name = "Customer.findByNameAndAddress", query = "from Customer c where c.address = :address and c.name = :name"),
+		@NamedQuery(name = "Customer.findByOrderCustomerId", query = "select c from Customer c join c.orderCustomers as o where o is not empty and o.orderCustomerId = :orderCustomerId")})
 public class Customer implements Serializable {
 
 	/**
@@ -68,6 +74,15 @@ public class Customer implements Serializable {
 	@Column(name = "createdDate")
 	private Date createdDate;
 
+	/*
+	 * Ici, on indique un lien de type one-to-many entre Customer et
+	 * OrderCustomer. Grâce à cascade, on indique qu'il faut persister en
+	 * cascade (ainsi, lorsqu'on sauvegarde un client, si une de ces commandes à
+	 * été modifiée, celle-ci est sauvegardée en même temps.
+	 */
+	@OneToMany(mappedBy = "customer", cascade = { CascadeType.ALL }, orphanRemoval = true)
+	private List<OrderCustomer> orderCustomers;
+
 	public Customer() {
 
 	}
@@ -80,10 +95,14 @@ public class Customer implements Serializable {
 
 	public Customer(final Long customerId, final String name, final String address,
 			final Date createdDate) {
+		this(name, address, createdDate);
 		this.customerId = customerId;
-		this.name = name;
-		this.address = address;
-		this.createdDate = createdDate;
+	}
+
+	public Customer(final Long customerId, final String name, final String address,
+			final Date createdDate, final List<OrderCustomer> orderCustomers) {
+		this(customerId, name, address, createdDate);
+		this.orderCustomers = orderCustomers;
 	}
 
 	public Long getCustomerId() {
@@ -118,7 +137,27 @@ public class Customer implements Serializable {
 		this.createdDate = createdDate;
 	}
 
+	public List<OrderCustomer> getOrderCustomers() {
+		return orderCustomers;
+	}
+
+	public void setOrderCustomers(List<OrderCustomer> orderCustomers) {
+		this.orderCustomers = orderCustomers;
+	}
+
 	public CustomerDTO entity2Bean() {
 		return new CustomerDTO(this.customerId, this.name, this.address, this.createdDate);
+	}
+
+	public CustomerDTO entity2BeanWithOrder() {
+		final List<OrderCustomerDTO> orderCustomersDTO = new ArrayList<OrderCustomerDTO>();
+		if (orderCustomers != null && orderCustomers.size() > 0) {
+			for (final OrderCustomer orderCustomer : orderCustomers) {
+				orderCustomersDTO.add(new OrderCustomerDTO(orderCustomer.getOrderCustomerId(),
+						orderCustomer.getOrderDate()));
+			}
+		}
+		return new CustomerDTO(this.customerId, this.name, this.address, this.createdDate,
+				orderCustomersDTO);
 	}
 }

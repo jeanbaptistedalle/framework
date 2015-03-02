@@ -3,9 +3,12 @@ package dto;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import model.Customer;
+import model.OrderCustomer;
 
 /**
  * CustomerDTO est un objet DTO (Data Transfer Object) qui permet de faire
@@ -38,6 +41,8 @@ public class CustomerDTO implements Serializable {
 
 	private Date createdDate;
 
+	private List<OrderCustomerDTO> orderCustomers;
+
 	public CustomerDTO() {
 	}
 
@@ -49,15 +54,10 @@ public class CustomerDTO implements Serializable {
 		this.createdDate = createdDate;
 	}
 
-	/**
-	 * Cette méthode permet de convertir un dto en entité. Cette méthode sera
-	 * donc souvent appelé lorsqu'une donnée se trouvant dans la couche
-	 * Présentation doit atteindre la couche Persistance.
-	 * 
-	 * @return
-	 */
-	public Customer dto2Entity() {
-		return new Customer(this.customerId, this.name, this.address, this.createdDate);
+	public CustomerDTO(final Long customerId, final String name, final String address,
+			final Date createdDate, final List<OrderCustomerDTO> orderCustomers) {
+		this(customerId, name, address, createdDate);
+		this.orderCustomers = orderCustomers;
 	}
 
 	public Long getCustomerId() {
@@ -95,5 +95,36 @@ public class CustomerDTO implements Serializable {
 
 	public void setCreatedDate(final Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public List<OrderCustomerDTO> getOrderCustomers() {
+		return orderCustomers;
+	}
+
+	public void setOrderCustomers(List<OrderCustomerDTO> orderCustomers) {
+		this.orderCustomers = orderCustomers;
+	}
+
+	/**
+	 * Cette méthode permet de convertir un dto en entité. Cette méthode sera
+	 * donc souvent appelé lorsqu'une donnée se trouvant dans la couche
+	 * Présentation doit atteindre la couche Persistance.
+	 * 
+	 * @return
+	 */
+	public Customer DTO2Entity() {
+		return new Customer(this.customerId, this.name, this.address, this.createdDate);
+	}
+
+	public Customer DTO2EntityWithOrder() {
+		final List<OrderCustomer> orderCustomersEntity = new ArrayList<OrderCustomer>();
+		if (orderCustomers != null && orderCustomers.size() > 0) {
+			for (final OrderCustomerDTO orderCustomer : orderCustomers) {
+				orderCustomersEntity.add(new OrderCustomer(orderCustomer.getOrderCustomerId(),
+						orderCustomer.getOrderDate()));
+			}
+		}
+		return new Customer(this.customerId, this.name, this.address, this.createdDate,
+				orderCustomersEntity);
 	}
 }

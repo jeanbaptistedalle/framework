@@ -28,15 +28,13 @@ import dao.CustomerDAO;
 @Transactional
 public class CustomerDAOImpl extends GenericDAOImpl<Customer, Long> implements CustomerDAO {
 
-	private SessionFactory sessionFactory;
-
-	public List<Customer> listCustomer(){
+	public List<Customer> listCustomer() {
 		return this.findAll();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Customer> findByName(final String name) {
-		final Query query = sessionFactory.openSession().getNamedQuery("Customer.findByName");
+		final Query query = getSession().getNamedQuery("Customer.findByName");
 		query.setParameter("name", name);
 		return (List<Customer>) query.list();
 	}
@@ -47,34 +45,30 @@ public class CustomerDAOImpl extends GenericDAOImpl<Customer, Long> implements C
 		 * Ici, on appelle la requête Customer.findByAddress qui est définie
 		 * dans la classe Customer
 		 */
-		final Query query = sessionFactory.openSession().getNamedQuery("Customer.findByAddress");
+		final Query query = getSession().getNamedQuery("Customer.findByAddress");
 		query.setParameter("address", address);
 		return (List<Customer>) query.list();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Customer> findByNameAndAddress(final String name, final String address) {
-		final Query query = sessionFactory.openSession().getNamedQuery(
+		final Query query = getSession().getNamedQuery(
 				"Customer.findByNameAndAddress");
 		query.setParameter("name", name);
 		query.setParameter("address", address);
 		return (List<Customer>) query.list();
 	}
 
-	@Autowired
-	public void setSessionFactory(final SessionFactory sessionFactory) {
-		/*
-		 * Ce setter permet à la fois d'injecter la dépendance sessionFactory à
-		 * notre DAO mais aussi de l'injecter à la super classe (GenericDAOImpl)
-		 * qui utilise une instance private de celle-ci (et donc non visible par
-		 * les classes filles.
-		 */
-		super.setSessionFactory(sessionFactory);
-		this.sessionFactory = sessionFactory;
+	public Customer findByOrder(final Long orderCustomerId) {
+		final Query query = getSession().getNamedQuery(
+				"Customer.findByOrderCustomerId");
+		query.setParameter("orderCustomerId", orderCustomerId);
+		return (Customer) query.uniqueResult();
 	}
-
-	public SessionFactory getSessionFactory() {
-		return sessionFactory;
-	}
-
+	
+	 @Autowired
+     @Override
+     public void setSessionFactory(SessionFactory sessionFactory) {
+             super.setSessionFactory(sessionFactory);
+     }
 }

@@ -6,7 +6,7 @@
 <body>
 	<h1>Struts 2 + Spring + Hibernate</h1>
 
-	<h2>All Customers</h2>
+	<h2>All Customers with their orders</h2>
 
 	<s:if test="customerList != null && customerList.size() > 0">
 		<table>
@@ -31,7 +31,7 @@
 					<td>${customer.name}</td>
 					<td>${customer.address}</td>
 					<td>${customer.formatCreatedDate}</td>
-					
+
 					<!-- On définit ici une url qui référence une action, puis on l'affecte à un lien -->
 					<td><s:url id="deleteAction" action="deleteCustomerAction">
 							<s:param name="customerId" value="customerId" />
@@ -40,7 +40,27 @@
 					<td><s:url id="editAction" action="editCustomerAction">
 							<s:param name="customerId" value="customerId" />
 						</s:url> <s:a href="%{editAction}">edit</s:a></td>
+					<td><s:url id="addOrder" action="addOrderAction">
+							<s:param name="customerId" value="customerId" />
+						</s:url> <s:a href="%{addOrder}">new order</s:a></td>
 				</tr>
+				<!-- ici, orderCustomers fait appel à la méthode getOrderCustomers()
+				 qui renvoie la liste contenue dans le client courant de la boucle -->
+				<s:if test="orderCustomers != null && orderCustomers.size() > 0">
+					<s:iterator value="orderCustomers" var="orderCustomer"
+						status="orderStatus">
+						<tr>
+							<td />
+							<td>Commande N°</td>
+							<td>${orderCustomer.orderCustomerId}</td>
+							<td>réalisée le</td>
+							<td>${orderCustomer.orderDate}</td>
+					<td><s:url id="deleteOrder" action="deleteOrderAction">
+							<s:param name="orderCustomerId" value="orderCustomerId" />
+						</s:url> <s:a href="%{deleteOrder}">delete</s:a></td>
+						</tr>
+					</s:iterator>
+				</s:if>
 			</s:iterator>
 		</table>
 	</s:if>
