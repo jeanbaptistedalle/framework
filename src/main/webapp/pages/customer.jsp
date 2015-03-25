@@ -7,7 +7,7 @@
 	<h1>Struts 2 + Spring + Hibernate</h1>
 
 	<h2>All Customers with their orders</h2>
-
+	<!-- implicidement, customerList fait en fait appel à getCustomerList() -->
 	<s:if test="customerList != null && customerList.size() > 0">
 		<table>
 			<tr>
@@ -18,24 +18,29 @@
 				<th></th>
 				<th></th>
 			</tr>
-			<!-- Grâce à s.iterator, on peut iterer sur une liste se situant dans le code java. 
+			<!-- Grâce à s:iterator, on peut iterer sur une liste se situant dans le code java. 
 				Ici, on itère donc sur customerList, qui se trouve dans la classe ListCustomerAction
-				et on stocke l'utilisateur actuel dans la variable customer -->
+				et on stocke l'utilisateur actuel dans la variable customer. Pour que cela fonctionne,
+				il faut néanmoins qu'il existe que cet objet existe dans ListCustomerAction -->
 			<s:iterator value="customerList" var="customer" status="userStatus">
 				<tr>
 					<!-- On utilise ici une notation EL pour accéder aux attributs de customer-->
 					<td>${customer.customerId}</td>
-					<!-- customer.customerId appelle en fait customer.getCustomerId(), il faut donc 
+					<!-- customer.customerId appelle en fait getCustomer().getCustomerId(), il faut donc 
 					respecter rigouresement la syntaxe des getters/setters 
 					(à savoir minuscule pour le premier mot, majuscule pour les suivants) -->
 					<td>${customer.name}</td>
 					<td>${customer.address}</td>
 					<td>${customer.formatCreatedDate}</td>
 
-					<!-- On définit ici une url qui référence une action, puis on l'affecte à un lien -->
+					<!-- On définit ici une url qui référence l'action deleteCustomerAction
+					 définie dans struts.xml, puis on l'affecte à un lien -->
 					<td><s:url id="deleteAction" action="deleteCustomerAction">
 							<s:param name="customerId" value="customerId" />
-						</s:url> <s:a href="%{deleteAction}">delete</s:a></td>
+						</s:url> 
+						<!-- %{deleteAction} fait donc ici reference à l'url 
+						dont l'id est deleteAction (défini juste au dessus) -->
+						<s:a href="%{deleteAction}">delete</s:a></td>
 
 					<td><s:url id="editAction" action="editCustomerAction">
 							<s:param name="customerId" value="customerId" />
@@ -55,9 +60,9 @@
 							<td>${orderCustomer.orderCustomerId}</td>
 							<td>réalisée le</td>
 							<td>${orderCustomer.orderDate}</td>
-					<td><s:url id="deleteOrder" action="deleteOrderAction">
-							<s:param name="orderCustomerId" value="orderCustomerId" />
-						</s:url> <s:a href="%{deleteOrder}">delete</s:a></td>
+							<td><s:url id="deleteOrder" action="deleteOrderAction">
+									<s:param name="orderCustomerId" value="orderCustomerId" />
+								</s:url> <s:a href="%{deleteOrder}">delete</s:a></td>
 						</tr>
 					</s:iterator>
 				</s:if>
